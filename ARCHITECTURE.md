@@ -269,14 +269,14 @@ sequenceDiagram
 flowchart TD
     A[ddns register alice 10.0.0.1] --> B[Load or generate\nEd25519 keypair]
     B --> C[Build NameRecord\nname, addrs, createdAt, updatedAt, TTL]
-    C --> D[Compute ContentPayload\nname|hex_pubkey|addrs|txt|created|updated|ttl|diff]
-    D --> E[Proof of Work\nFind nonce: SHA-256\nContentPayload‖nonce\nfirst 16 bits = 0]
+    C --> D["Compute ContentPayload\nname#124;hex_pubkey#124;addrs#124;txt#124;created#124;updated#124;ttl#124;diff"]
+    D --> E["Proof of Work\nFind nonce: SHA-256\nContentPayload #124;#124; nonce_bytes\nfirst 16 bits = 0"]
     E --> F[Set record.PowNonce = nonce]
-    F --> G[Compute SignedPayload\nContentPayload|nonce]
-    G --> H[Ed25519 Sign\nsig = sign privKey SignedPayload]
+    F --> G["Compute SignedPayload\nContentPayload #124; nonce"]
+    G --> H["Ed25519 Sign\nsig = sign privKey SignedPayload"]
     H --> I[Set record.Signature = sig]
     I --> J[Connect to DHT\nBootstrap from seeds]
-    J --> K[FIND_NODE sha1 name\nGet k closest nodes]
+    J --> K["FIND_NODE sha1(name)\nGet k closest nodes"]
     K --> L[STORE to each\nof k closest nodes]
     L --> M[Registration complete]
 ```
@@ -302,7 +302,7 @@ graph LR
     end
 
     subgraph Verification
-        V1[SHA-256 ContentPayload‖nonce_bytes\n→ check first 16 bits = 0]
+        V1["SHA-256 ContentPayload #124;#124; nonce_bytes\n→ check first 16 bits = 0"]
         V2[Ed25519 verify pubkey SignedPayload sig]
     end
 
@@ -547,11 +547,11 @@ graph TD
         BCAST_ADDR[255.255.255.255:4243\nUDP broadcast]
     end
 
-    N1 -->|Register _ddns._udp.local.\nPort=4242 TXT id=hex| MDNS_GROUP
+    N1 -->|"Register _ddns._udp.local.\nPort=4242 TXT id=hex"| MDNS_GROUP
     N2 -->|Browse _ddns._udp.local.| MDNS_GROUP
-    MDNS_GROUP -->|ServiceEntry{AddrIPv4,Port,TXT}| N2
+    MDNS_GROUP -->|"ServiceEntry(AddrIPv4, Port, TXT)"| N2
 
-    N3 -->|BroadcastAnnounce{v=1,NodeID,Port}\nevery 30s| BCAST_ADDR
+    N3 -->|"BroadcastAnnounce(v=1, NodeID, Port)\nevery 30s"| BCAST_ADDR
     BCAST_ADDR -->|packet + source IP| N1
 
     N2 -->|PeerDiscovered callback\nping to verify| N1
