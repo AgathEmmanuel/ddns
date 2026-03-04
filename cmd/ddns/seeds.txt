@@ -1,0 +1,3 @@
+# DDNS Sidenet seed nodes
+# Format: ip:port one per line
+# Lines starting with # are ignored
